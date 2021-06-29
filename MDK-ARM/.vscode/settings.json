@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "motor.h": "c",
+        "shoot.h": "c",
+        "*.tcc": "c",
+        "robot.h": "c"
+    }
+}
