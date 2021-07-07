@@ -56,22 +56,22 @@ int flag = 0;
 osThreadId_t ShootTaskHandle;
 const osThreadAttr_t ShootTask_attributes = {
   .name = "ShootTask",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
 };
 /* Definitions for PositionTask */
 osThreadId_t PositionTaskHandle;
 const osThreadAttr_t PositionTask_attributes = {
   .name = "PositionTask",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
-  .stack_size = 128 * 4
 };
 /* Definitions for UserCmdTask */
 osThreadId_t UserCmdTaskHandle;
 const osThreadAttr_t UserCmdTask_attributes = {
   .name = "UserCmdTask",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
-  .stack_size = 128 * 4
 };
 /* Definitions for Supervise_Timer */
 osTimerId_t Supervise_TimerHandle;
