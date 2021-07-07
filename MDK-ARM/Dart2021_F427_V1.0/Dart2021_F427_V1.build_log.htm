@@ -17,16 +17,22 @@ Library Manager: ArmAr.exe V5.06 update 7 (build 960)
 Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
 CPU DLL:         SARMCM3.DLL V5.33.0.0
 Dialog DLL:      DCM.DLL V1.17.3.0
-Target DLL:      CMSIS_AGDI.dll V1.32.12.0
+Target DLL:      Segger\JL2CM3.dll V2.99.38.0
 Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
 C:\Users\lmh12138\Desktop\keil\Dart2021_F427_V1.0\MDK-ARM\Dart2021_F427_V1.0.uvprojx
-Project File Date:  05/09/2021
+Project File Date:  07/07/2021
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Dart2021_F427_V1.0'
+compiling position_ctrl.c...
+..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Core\task\shoot.h(76): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Core\task\position_ctrl.c: 2 warnings, 0 errors
 compiling position.c...
 ..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -35,20 +41,6 @@ compiling position.c...
 ..\Core\task\position.c(102): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\task\position.c: 3 warnings, 0 errors
-compiling shoot.c...
-..\Core\task\shoot.h(76): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\task\shoot.c(355): warning:  #1-D: last line of file ends without a newline
-  }
-..\Core\task\shoot.c: 3 warnings, 0 errors
-compiling main.c...
-../Core/task/position.h(26): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/task/shoot.h(76): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Src/main.c: 2 warnings, 0 errors
 compiling shoot_ctrl.c...
 ..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -57,12 +49,14 @@ compiling shoot_ctrl.c...
 ..\Core\task\shoot_ctrl.c(20): warning:  #1-D: last line of file ends without a newline
   }
 ..\Core\task\shoot_ctrl.c: 3 warnings, 0 errors
-compiling position_ctrl.c...
-..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
-  #endif
+compiling shoot.c...
 ..\Core\task\shoot.h(76): warning:  #1-D: last line of file ends without a newline
   #endif
-..\Core\task\position_ctrl.c: 2 warnings, 0 errors
+..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Core\task\shoot.c(355): warning:  #1-D: last line of file ends without a newline
+  }
+..\Core\task\shoot.c: 3 warnings, 0 errors
 compiling robot.c...
 ..\Core\task\position.h(26): warning:  #1-D: last line of file ends without a newline
   #endif
@@ -75,8 +69,14 @@ compiling freertos.c...
 ../Core/task/shoot.h(76): warning:  #1-D: last line of file ends without a newline
   #endif
 ../Core/Src/freertos.c: 2 warnings, 0 errors
+compiling main.c...
+../Core/task/position.h(26): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/task/shoot.h(76): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Src/main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=22480 RO-data=672 RW-data=296 ZI-data=24120  
+Program Size: Code=23168 RO-data=672 RW-data=304 ZI-data=24760  
 FromELF: creating hex file...
 "Dart2021_F427_V1.0\Dart2021_F427_V1.0" - 0 Error(s), 17 Warning(s).
 
@@ -102,7 +102,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE:5.4.0
       Include file:  CMSIS\Core\Include\tz_context.h
-Build Time Elapsed:  00:00:07
+Build Time Elapsed:  00:00:08
 </pre>
 </body>
 </html>

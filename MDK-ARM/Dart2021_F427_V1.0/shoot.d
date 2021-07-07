@@ -2,6 +2,7 @@ dart2021_f427_v1.0\shoot.o: ..\Core\task\shoot.c
 dart2021_f427_v1.0\shoot.o: ..\Core\task\shoot.h
 dart2021_f427_v1.0\shoot.o: ../Core/bsp/motor.h
 dart2021_f427_v1.0\shoot.o: ../Core/lib/pid.h
+dart2021_f427_v1.0\shoot.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 dart2021_f427_v1.0\shoot.o: ../Core/Inc/can.h
 dart2021_f427_v1.0\shoot.o: ../Core/Inc/main.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
@@ -11,7 +12,6 @@ dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_de
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f427xx.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Include/core_cm4.h
-dart2021_f427_v1.0\shoot.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Include/cmsis_version.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -36,7 +36,6 @@ dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pw
 dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 dart2021_f427_v1.0\shoot.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-dart2021_f427_v1.0\shoot.o: ../Core/Inc/gpio.h
 dart2021_f427_v1.0\shoot.o: ../Core/bsp/bsp_can.h
 dart2021_f427_v1.0\shoot.o: ..\Core\task\robot.h
 dart2021_f427_v1.0\shoot.o: ../Core/bsp/remote.h

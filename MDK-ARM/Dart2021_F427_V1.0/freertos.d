@@ -52,7 +52,6 @@ dart2021_f427_v1.0\freertos.o: ../Core/task/robot.h
 dart2021_f427_v1.0\freertos.o: ../Core/bsp/motor.h
 dart2021_f427_v1.0\freertos.o: ../Core/lib/pid.h
 dart2021_f427_v1.0\freertos.o: ../Core/Inc/can.h
-dart2021_f427_v1.0\freertos.o: ../Core/Inc/gpio.h
 dart2021_f427_v1.0\freertos.o: ../Core/bsp/bsp_can.h
 dart2021_f427_v1.0\freertos.o: ../Core/bsp/remote.h
 dart2021_f427_v1.0\freertos.o: ../Core/Inc/usart.h

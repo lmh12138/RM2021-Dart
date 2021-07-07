@@ -36,5 +36,4 @@ dart2021_f427_v1.0\bsp_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_
 dart2021_f427_v1.0\bsp_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 dart2021_f427_v1.0\bsp_can.o: ..\Core\bsp\motor.h
 dart2021_f427_v1.0\bsp_can.o: ../Core/lib/pid.h
-dart2021_f427_v1.0\bsp_can.o: ../Core/Inc/gpio.h
 dart2021_f427_v1.0\bsp_can.o: ../Core/timer/supervise.h
