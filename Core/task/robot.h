@@ -4,7 +4,7 @@
     * @version        : V1.0
     * @Author         : 李鸣航
     * @Date           : 2021-01-22 23:17
-    * @LastEditTime   : 2021-04-28 21:54
+    * @LastEditTime   : 2021-06-29 14:39
     * @Note           : 
     *       1.本代码基于STM32F427IIHx开发，使用大疆Robomaster A型开发板，切勿使用其他型号开发板
     *       2.本代码仅适用于Robomaster2021飞镖架使用，不建议用作其他兵种
@@ -119,10 +119,13 @@ struct dart_t
     enum act_state_e act_state;
     enum auto_strike_e auto_strike;
     enum auto_speed_e auto_speed;
+    
     //单套摩擦轮转速
     float friction_speed;
+
     //飞镖射出速度
     float strike_speed;
+
     //位置参数
     int position_3508_bias;
     int position_2006_2_bias;
@@ -132,6 +135,7 @@ struct dart_t
     float level_speed;
     float translation_speed;
     float height_speed;
+    
     //剩余飞镖量
     int dart_count;
 };

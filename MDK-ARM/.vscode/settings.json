@@ -3,6 +3,7 @@
         "motor.h": "c",
         "shoot.h": "c",
         "*.tcc": "c",
-        "robot.h": "c"
+        "robot.h": "c",
+        "position.h": "c"
     }
 }

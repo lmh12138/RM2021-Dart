@@ -2,9 +2,9 @@
     * @file           : position.h
     * @brief          : 飞镖架yaw、pitch以及飞镖本身roll轴的位置读取及计算
     * @version        : V1.0.0
-    * @Author         : Lmh
+    * @Author         : 李鸣航
     * @Date           : 2021-01-22 2:17
-    * @LastEditTime   : 2021-01-23 21:10
+    * @LastEditTime   : 2021-06-29 14:38
     * @Note           : 
     * @Copyright(c)   : Critical HIT copyrighted
     */
