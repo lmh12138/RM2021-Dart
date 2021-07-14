@@ -35,7 +35,7 @@ typedef enum
     SHOOT_DATA_CMD_ID                 = 0x0207,
     BULLET_REMAINING_CMD_ID           = 0x0208,
     RFID_STATUS_ID                    = 0x0209,
-    DART_CILENT_CMD_T                 = 0x020A,
+    DART_CLIENT_CMD_T                 = 0x020A,
     STUDENT_INTERACTIVE_DATA_CMD_ID   = 0x0301,
     IDCustomData,
 }referee_cmd_id_t;

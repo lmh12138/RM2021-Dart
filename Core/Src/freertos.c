@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "supervise.h"
 #include "fifo.h"
+#include "referee.h"
 #include "robot.h"
 #include "position.h"
 #include "shoot.h"
@@ -50,7 +51,8 @@ int flag = 0;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+extern fifo_s_t referee_fifo;
+extern uint8_t referee_fifo_buf[REFEREE_FIFO_BUF_LENGTH];
 /* USER CODE END Variables */
 /* Definitions for ShootTask */
 osThreadId_t ShootTaskHandle;
@@ -73,6 +75,13 @@ const osThreadAttr_t UserCmdTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for RefereeTask */
+osThreadId_t RefereeTaskHandle;
+const osThreadAttr_t RefereeTask_attributes = {
+  .name = "RefereeTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for Supervise_Timer */
 osTimerId_t Supervise_TimerHandle;
 const osTimerAttr_t Supervise_Timer_attributes = {
@@ -87,6 +96,7 @@ const osTimerAttr_t Supervise_Timer_attributes = {
 void StartShootTask(void *argument);
 void StartPositionTask(void *argument);
 void StartUserCmdTask(void *argument);
+void StartRefereeTask(void *argument);
 void SuperviseTimer(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -131,6 +141,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of UserCmdTask */
   UserCmdTaskHandle = osThreadNew(StartUserCmdTask, NULL, &UserCmdTask_attributes);
+
+  /* creation of RefereeTask */
+  RefereeTaskHandle = osThreadNew(StartRefereeTask, NULL, &RefereeTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -199,6 +212,28 @@ void StartUserCmdTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartUserCmdTask */
+}
+
+/* USER CODE BEGIN Header_StartRefereeTask */
+/**
+* @brief Function implementing the RefereeTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartRefereeTask */
+void StartRefereeTask(void *argument)
+{
+  /* USER CODE BEGIN StartRefereeTask */
+	fifo_s_init(&referee_fifo, referee_fifo_buf, REFEREE_FIFO_BUF_LENGTH);
+	USART6_Init();
+	Referee_Data_Init();
+	//InitUI();
+  /* Infinite loop */
+  for(;;){
+	  Referee_Unpack_FIFO_Data();
+    osDelay(100);
+  }
+  /* USER CODE END StartRefereeTask */
 }
 
 /* SuperviseTimer function */

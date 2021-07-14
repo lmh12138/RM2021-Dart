@@ -16,5 +16,5 @@ void ShootCtrl_Remote(void)
 
 void ShootCtrl_MouseKey(void)
 {
-    ;
+    dart.strike_speed = DIRECT_CTRL_GAIN * (float)(1684 - CHx_BIAS);
 }

@@ -13,7 +13,7 @@ ext_event_data_t field_event;
 ext_supply_projectile_action_t supply_projectile_action_t;
 //ext_supply_projectile_booking_t supply_projectile_booking_t;
 ext_referee_warning_t referee_warning_t;
-
+ext_dart_remaining_time_t dart_remaining_time_t;
 ext_game_robot_state_t robot_state;
 ext_power_heat_data_t power_heat_data_t;
 ext_game_robot_pos_t game_robot_pos_t;
@@ -22,6 +22,8 @@ aerial_robot_energy_t UAV_energy_t;
 ext_robot_hurt_t robot_hurt_t;
 ext_shoot_data_t shoot_data_t;
 ext_bullet_remaining_t bullet_remaining_t;
+uint16_t last_operate_launch_cmd_time = 0;
+ext_dart_client_cmd_t dart_client_cmd_t;
 //ext_student_interactive_data_t student_interactive_data_t;
 
 /**
@@ -42,7 +44,7 @@ void Referee_Data_Init(void)
     memset(&supply_projectile_action_t, 0, sizeof(ext_supply_projectile_action_t));
     //memset(&supply_projectile_booking_t, 0, sizeof(ext_supply_projectile_booking_t));
     memset(&referee_warning_t, 0, sizeof(ext_referee_warning_t));
-
+		memset(&dart_remaining_time_t,0,sizeof(dart_remaining_time_t));
     memset(&robot_state, 0, sizeof(ext_game_robot_state_t));
     memset(&power_heat_data_t, 0, sizeof(ext_power_heat_data_t));
     memset(&game_robot_pos_t, 0, sizeof(ext_game_robot_pos_t));
@@ -51,7 +53,9 @@ void Referee_Data_Init(void)
     memset(&robot_hurt_t, 0, sizeof(ext_robot_hurt_t));
     memset(&shoot_data_t, 0, sizeof(ext_shoot_data_t));
     memset(&bullet_remaining_t, 0, sizeof(ext_bullet_remaining_t));
+    memset(&dart_client_cmd_t, 0, sizeof(ext_dart_client_cmd_t));
     //memset(&student_interactive_data_t, 0, sizeof(ext_student_interactive_data_t));
+    last_operate_launch_cmd_time = dart_client_cmd_t.operate_launch_cmd_time;
 }
 
 /**
@@ -61,6 +65,8 @@ void Referee_Data_Init(void)
   */
 void Referee_Data_Solve(uint8_t *frame)
 {
+    last_operate_launch_cmd_time = dart_client_cmd_t.operate_launch_cmd_time;
+    
     uint16_t cmd_id = 0;
     uint8_t index = 0;
 	//取出帧头
@@ -116,6 +122,12 @@ void Referee_Data_Solve(uint8_t *frame)
 		break;
 	case BULLET_REMAINING_CMD_ID:
 		memcpy(&bullet_remaining_t, frame + index, sizeof(ext_bullet_remaining_t));
+		break;
+  case DART_CLIENT_CMD_T:
+    memcpy(&dart_client_cmd_t,frame + index,sizeof(dart_client_cmd_t));
+    break;
+	case DART_REMAINING_TIME_ID:
+    memcpy(&dart_remaining_time_t,frame + index,sizeof(dart_remaining_time_t));
 		break;
 //	case STUDENT_INTERACTIVE_DATA_CMD_ID:
 //		memcpy(&student_interactive_data_t, frame + index, sizeof(student_interactive_data_t));

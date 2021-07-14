@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include <math.h>
 #include "remote.h"
+#include "referee.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -274,6 +275,8 @@ void DMA2_Stream6_IRQHandler(void)
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
+	Referee_IDLE_Callback();
+	return;
 
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);

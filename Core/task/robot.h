@@ -20,6 +20,7 @@
 #include "position.h"
 #include "shoot.h"
 #include "supervise.h"
+#include "referee.h"
 
 extern struct CAN_Motor can1_motor_1;
 extern struct CAN_Motor can1_motor_2;
@@ -90,8 +91,8 @@ enum auto_strike_e
 /*-----飞镖架自动加速进程-----*/
 enum auto_speed_e
 {
-    AUTO_SPEED_STOP,
-    AUTO_SPEED_READY
+    AUTO_SPEED_OFF, //关闭摩擦轮
+    AUTO_SPEED_ON   //开启摩擦轮
 };
 
 /*-----电动推杆升降模式-----*/

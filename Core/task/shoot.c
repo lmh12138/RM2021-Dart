@@ -16,6 +16,7 @@
 #include "math.h"
 #include "cmsis_os.h"
 #include "tim.h"
+#include "referee.h"
 
 extern struct dart_t dart;
 extern int auto_flag;
@@ -36,27 +37,39 @@ int speed_error;
     */
 void ShootParamChange(void)
 {
+  if(dart.work_state == RemoteControl){    
     if(dart.work_state == STOP)
-    {
-        CanTransmit_1234(&hcan1, 0, 0, 0, 0);
-        CanTransmit_5678(&hcan1, 0, 0, 0, 0);
-        return;
-    }
-    else if(dart.strike_state == DEBUG)
-    {
-        SHOOT_3508_MOTOR1.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR12;
-        SHOOT_3508_MOTOR2.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR12;
-        SHOOT_3508_MOTOR3.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR34;
-        SHOOT_3508_MOTOR4.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR34;
-        SHOOT_3510_MOTOR1.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR56;
-        SHOOT_3510_MOTOR2.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR56;
-        ShootParamCalculate();
-        CanTransmit_1234(&hcan1, SHOOT_3510_MOTOR1.speed_pid.output, SHOOT_3510_MOTOR2.speed_pid.output, 
+      {
+          CanTransmit_1234(&hcan1, 0, 0, 0, 0);
+          CanTransmit_5678(&hcan1, 0, 0, 0, 0);
+          return;
+      }
+      else if(dart.strike_state == DEBUG)
+      {
+          SHOOT_3508_MOTOR1.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR12;
+          SHOOT_3508_MOTOR2.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR12;
+          SHOOT_3508_MOTOR3.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR34;
+          SHOOT_3508_MOTOR4.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR34;
+          SHOOT_3510_MOTOR1.speed_pid.ref = -dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR56;
+          SHOOT_3510_MOTOR2.speed_pid.ref = dart.strike_speed / (PROPER_MOTOR12 + PROPER_MOTOR34 + PROPER_MOTOR56) * PROPER_MOTOR56;
+          ShootParamCalculate();
+          CanTransmit_1234(&hcan1, SHOOT_3510_MOTOR1.speed_pid.output, SHOOT_3510_MOTOR2.speed_pid.output, 
                                                             SHOOT_3508_MOTOR3.speed_pid.output, SHOOT_3508_MOTOR4.speed_pid.output);
-        CanTransmit_5678(&hcan1, SHOOT_3508_MOTOR1.speed_pid.output, SHOOT_3508_MOTOR2.speed_pid.output, 0, 0);
+          CanTransmit_5678(&hcan1, SHOOT_3508_MOTOR1.speed_pid.output, SHOOT_3508_MOTOR2.speed_pid.output, 0, 0);
+      }
+      else if(dart.strike_state == OUTPOST)
+      {
+          if(raise_frictiongear_speed_flag && dart.auto_strike == AUTO_READY && dart.dart_count > 0)
+          {
+              dart_strike_flag = AutoShoot();
+          }
+          if(dart.auto_strike == AUTO_STOP)
+          {
+              Remain2006TwoFrictiongearPosition();
+          }
+      }
     }
-    else if(dart.strike_state == OUTPOST)
-    {
+    else if(dart.work_state == MouseKeyControl){
         if(raise_frictiongear_speed_flag && dart.auto_strike == AUTO_READY && dart.dart_count > 0)
         {
             dart_strike_flag = AutoShoot();
@@ -94,19 +107,31 @@ void ShootParamCalculate(void)
     * @param   {*}
     * @return  {1：发射成功；0：发射失败}
     */
+int change_dart_time = 0;
+int stop_time = 0;
 int AutoShoot(void)
 {
     if(!change_dart_flag)
     {
         change_dart_flag = ChangeDart();
+				change_dart_time = 157;
         return 0;
     }
-    else if(!letdown_3510frictiongear_flag)
+		if(change_dart_time != 0){
+			change_dart_time --;
+			return 0;
+		}
+    if(!letdown_3510frictiongear_flag)
     {
         letdown_3510frictiongear_flag = Letdown3510Frictiongear();
         return 0;
     }
-    else if(!raise_3510frictiongear_flag)
+		//stop_time = 30;
+		//if(stop_time != 0){
+		//		stop_time --;
+		//		return 0;
+		//}
+    if(!raise_3510frictiongear_flag)
     {
         if(!raise_3510frictiongear_waiting_flag)
         {
@@ -335,7 +360,7 @@ void Remain35083510FrictiongearSpeed(void)
         CanTransmit_1234(&hcan1, 0, 0, 0, 0);
         CanTransmit_5678(&hcan1, 0, 0, 0, 0);
     }
-    else if(dart.strike_state != DEBUG && dart.auto_speed == AUTO_SPEED_READY && dart.dart_count > 0)
+    else if(dart.strike_state != DEBUG && dart.auto_speed == AUTO_SPEED_ON && dart.dart_count > 0)
     {
         raise_frictiongear_speed_flag = RaiseFrictiongearSpeed();
     }

@@ -15,10 +15,14 @@
 #include <string.h>
 #include "tim.h"
 #include "cmsis_os.h"
+#include "referee.h"
 
 struct dart_t dart;
 extern struct DT7Remote_t Remote;
-int auto_flag = 1;
+extern ext_dart_client_cmd_t dart_client_cmd_t;
+extern uint16_t last_operate_launch_cmd_time;
+
+int auto_flag = 0;
 
 /**
     * @brief  : 飞镖架参数初始化
@@ -47,7 +51,7 @@ void DartParamInit(void)
     MotorParamInit(&SHOOT_3510_MOTOR1,     50,0.1,0,5000,20000,  0,0,0,0,0);
     MotorParamInit(&SHOOT_3510_MOTOR2,     50,0.1,0,5000,20000,  0,0,0,0,0);
     MotorParamInit(&POSITION_2006_MOTOR1, 20,0,0,0,8000,  0,0,0,0,0);
-    MotorParamInit(&POSITION_2006_MOTOR2, 5,0,0,0,8000,  0.1,0,0,5000,5000);
+    MotorParamInit(&POSITION_2006_MOTOR2, 8,0,0.5,0,8000,  0.1,0,0,5000,5000);
     MotorParamInit(&POSITION_3508_MOTOR,  5,0,0,2048,16000,  0.4,0,0,5000,10000);
     
     HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
@@ -111,41 +115,51 @@ void DartStateChange(void)
     {
         dart.work_state = MouseKeyControl;
     }
-    
-    if(Remote.rc.s1 == 1)
-    {
-        dart.strike_state = DEBUG;
-    }
-    else if(Remote.rc.s1 == 3)
-    {
-        dart.strike_state = OUTPOST;
-        if(Remote.rc.ch1 == 1684 && Remote.rc.ch2 == 1024)
-        {
-            dart.auto_speed = AUTO_SPEED_READY;
-        }
-        else if(Remote.rc.ch2 != 1024)
-        {
-            dart.auto_speed = AUTO_SPEED_STOP;
-        }
-        if(auto_flag == 1 && Remote.rc.ch1 == 1684)
-        {
-            dart.auto_strike = AUTO_READY;
-            auto_flag = 0;
-        }
-    }
-    else
-    {
-        dart.strike_state = BASE;
-    }
-    
+
     if(dart.work_state == RemoteControl)
-    {
+    {    
+        if(Remote.rc.s1 == 1) //左上角switch->上
+        {
+            dart.strike_state = DEBUG;
+        }
+        else if(Remote.rc.s1 == 3) //左上角switch->中
+        {
+            dart.strike_state = OUTPOST;
+            //ch1打到最上再回中且ch2在中位，开始执行自动发射任务
+            if(Remote.rc.ch1 == 1684){
+              if(Remote.rc.ch2 != 1024){ //ch2不在中位，什么都不做
+                  dart.auto_speed = AUTO_SPEED_OFF;
+                  auto_flag = 0;
+              }
+              else{   //ch2在中位
+                  if(auto_flag == 0){   //ch1:中->上
+                      auto_flag = 1;
+                  }
+              }
+            }
+            else if(Remote.rc.ch1 == 1024 && auto_flag == 1){   //ch1:上->中
+              auto_flag = 0;
+              if(dart.auto_strike == AUTO_STOP){
+                  dart.auto_strike = AUTO_READY;    //可以发射
+                  dart.auto_speed = AUTO_SPEED_ON;  //启动摩擦轮
+              }
+            }
+        }
+        else  //左上switch->下
+        {
+            dart.strike_state = BASE;
+        }
         ShootCtrl_Remote();
         PositionCtrl_Remote();
     }
     else if(dart.work_state == MouseKeyControl)
     {
+        if(dart_client_cmd_t.dart_launch_opening_status == 0 && dart_client_cmd_t.operate_launch_cmd_time != last_operate_launch_cmd_time){
+            dart.auto_strike = AUTO_READY;    //可以发射
+            dart.auto_speed = AUTO_SPEED_ON;  //启动摩擦轮
+        }
         ShootCtrl_MouseKey();
         PositionCtrl_MouseKey();
     }
 }
+
