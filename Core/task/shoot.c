@@ -206,28 +206,49 @@ int RaiseFrictiongearSpeed(void)
     */
 int Letdown3510Frictiongear(void)
 {
-    if(letdown_3510frictiongear_count < LETDOWN_2006_TIME)
-    {
+		//使用碰撞开关,SET和RESET待定
+		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) == GPIO_PIN_RESET){	//没到底
         POSITION_2006_MOTOR2.speed_pid.ref = -LETDOWN_2006_SPEED;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-        letdown_3510frictiongear_count++;
-        return 0;
-    }
-    else if(POSITION_2006_MOTOR2.fdbSpeed != 0)
-    {
+				return 0;
+		}
+		else{
         POSITION_2006_MOTOR2.speed_pid.ref = 0;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-        return 0;
-    }
-    else
-    {
-        letdown_3510frictiongear_count = 0;
-        return 1;
-    }
+			if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到底了但电机还没停下来
+						return 0;
+				}
+				else{
+						return 1;
+				}
+		}
+//		//向下运行一段时间
+//    if(letdown_3510frictiongear_count < LETDOWN_2006_TIME)
+//    {
+//        POSITION_2006_MOTOR2.speed_pid.ref = -LETDOWN_2006_SPEED;
+//        POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
+//        PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
+//        CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
+//        letdown_3510frictiongear_count++;
+//        return 0;
+//    }
+//    else if(POSITION_2006_MOTOR2.fdbSpeed != 0)
+//    {
+//        POSITION_2006_MOTOR2.speed_pid.ref = 0;
+//        POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
+//        PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
+//        CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
+//        return 0;
+//    }
+//    else
+//    {
+//        letdown_3510frictiongear_count = 0;
+//        return 1;
+//    }
 }
 
 /**
@@ -236,29 +257,50 @@ int Letdown3510Frictiongear(void)
     * @return  {1：结束成功；0：结束失败}
     */
 int Raise3510Frictiongear(void)
-{
-    if(raise_3510frictiongear_count < RAISE_2006_TIME)
-    {
+{		
+		//使用碰撞开关,SET和RESET待定
+		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_10) == GPIO_PIN_RESET){	//没到顶
         POSITION_2006_MOTOR2.speed_pid.ref = RAISE_2006_SPEED;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-        raise_3510frictiongear_count++;
-        return 0;
-    }
-    else if(POSITION_2006_MOTOR2.fdbSpeed != 0)
-    {
+				return 0;
+		}
+		else{
         POSITION_2006_MOTOR2.speed_pid.ref = 0;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-        return 0;   
-    }
-    else
-    {
-        raise_3510frictiongear_count = 0;
-        return 1;
-    }
+			if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到顶了但电机还没停下来
+						return 0;
+				}
+				else{
+						return 1;
+				}
+		}
+//		//向上运行一段时间
+//    if(raise_3510frictiongear_count < RAISE_2006_TIME)
+//    {
+//        POSITION_2006_MOTOR2.speed_pid.ref = RAISE_2006_SPEED;
+//        POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
+//        PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
+//        CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
+//        raise_3510frictiongear_count++;
+//        return 0;
+//    }
+//    else if(POSITION_2006_MOTOR2.fdbSpeed != 0)
+//    {
+//        POSITION_2006_MOTOR2.speed_pid.ref = 0;
+//        POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
+//        PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
+//        CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
+//        return 0;   
+//    }
+//    else
+//    {
+//        raise_3510frictiongear_count = 0;
+//        return 1;
+//    }
 }
 
 /**
