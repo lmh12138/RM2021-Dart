@@ -4,7 +4,8 @@
     * @version        : V1.0
     * @Author         : 李鸣航
     * @Date           : 2021-01-23 17:28
-    * @LastEditTime   : 2021-05-23 20:39
+		* @LastEditor     : 陆柏臻
+    * @LastEditTime   : 2021-07-17 22:36
     * @Note           : 
     *       1.本代码基于STM32F427IIHx开发，使用大疆Robomaster A型开发板，切勿使用其他型号开发板
     *       2.本代码仅适用于Robomaster2021飞镖架使用，不建议用作其他兵种
