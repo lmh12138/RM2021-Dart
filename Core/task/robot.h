@@ -117,6 +117,7 @@ struct dart_t
     enum work_state_e work_state;
     enum work_state_e last_work_state;
     enum strike_state_e strike_state;
+    enum strike_state_e last_strike_state;
     enum act_state_e act_state;
     enum auto_strike_e auto_strike;
     enum auto_speed_e auto_speed;

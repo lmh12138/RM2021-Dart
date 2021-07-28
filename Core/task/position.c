@@ -19,6 +19,7 @@
 uint16_t i;
 extern struct dart_t dart;
 extern struct DT7Remote_t Remote;
+extern int auto_flag;
 
 /**
     * @brief  : 位置系统状态改变函数
@@ -41,7 +42,9 @@ void PositionParamChange(void)
         if(dart.strike_state == DEBUG)
         {
             #ifdef SERVO
-            TIM5 -> CCR4 += dart.dart_roll.RollSpeed;
+						ChangeDart();
+            //TIM5 -> CCR4 += dart.dart_roll.RollSpeed;
+						
             #endif
             
             #ifndef SERVO
@@ -51,7 +54,7 @@ void PositionParamChange(void)
             POSITION_2006_MOTOR1.speed_pid.ref = dart.level_speed;
             POSITION_2006_MOTOR2.speed_pid.ref = dart.translation_speed;
             PositionParamCalculate();
-            CanTransmit_1234(&hcan2, POSITION_2006_MOTOR1.speed_pid.output, POSITION_2006_MOTOR2.speed_pid.output, 
+            CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 
                                                     POSITION_3508_MOTOR.speed_pid.output, 0);
             if(dart.act_state == ACTUP)
             {

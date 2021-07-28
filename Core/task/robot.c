@@ -44,18 +44,18 @@ void DartParamInit(void)
     memset(&POSITION_2006_MOTOR2, 0, sizeof(POSITION_2006_MOTOR2));
     memset(&POSITION_3508_MOTOR, 0, sizeof(POSITION_3508_MOTOR));
 
-    MotorParamInit(&SHOOT_3508_MOTOR1,     50,0.1,0,5000,20000,  0,0,0,0,0);
-    MotorParamInit(&SHOOT_3508_MOTOR2,     50,0.1,0,5000,20000,  0,0,0,0,0);
-    MotorParamInit(&SHOOT_3508_MOTOR3,     50,0.1,0,5000,20000,  0,0,0,0,0);
-    MotorParamInit(&SHOOT_3508_MOTOR4,     50,0.1,0,5000,20000,  0,0,0,0,0);
-    MotorParamInit(&SHOOT_3510_MOTOR1,     50,0.1,0,5000,20000,  0,0,0,0,0);
-    MotorParamInit(&SHOOT_3510_MOTOR2,     50,0.1,0,5000,20000,  0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3508_MOTOR1, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3508_MOTOR2, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3508_MOTOR3, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3508_MOTOR4, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3510_MOTOR1, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
+    MotorParamInitFW(&SHOOT_3510_MOTOR2, 2.0, 1.2, 0.015, 0.01, 500, 75, 700, 131072, 16384, 0,0,0,0,0,0,0,0,0);
     MotorParamInit(&POSITION_2006_MOTOR1, 20,0,0,0,8000,  0,0,0,0,0);
-    MotorParamInit(&POSITION_2006_MOTOR2, 8,0,0.5,0,8000,  0.1,0,0,5000,5000);
+    MotorParamInit(&POSITION_2006_MOTOR2, 5,0,0,0,8000,  0.1,0,0,5000,5000);
     MotorParamInit(&POSITION_3508_MOTOR,  5,0,0,2048,16000,  0.4,0,0,5000,10000);
     
     HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_4);
-		TIM5 -> CCR4 = 2500;
+		TIM5 -> CCR4 = 590;
     ActParamInit();
 }
 
@@ -108,7 +108,7 @@ void DartStateChange(void)
         return;
     }
     else if(Remote.inputmode == RC_Remote)
-    {
+    { 
         dart.work_state = RemoteControl;
     }
     else if(Remote.inputmode == RC_MouseKey)
@@ -118,9 +118,13 @@ void DartStateChange(void)
 
     if(dart.work_state == RemoteControl)
     {    
+				dart.last_strike_state = dart.strike_state;
         if(Remote.rc.s1 == 1) //左上角switch->上
         {
             dart.strike_state = DEBUG;
+						if(dart.last_strike_state != DEBUG){
+							dart.dart_count = 4;
+						}
         }
         else if(Remote.rc.s1 == 3) //左上角switch->中
         {

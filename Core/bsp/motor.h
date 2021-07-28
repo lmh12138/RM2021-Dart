@@ -3,7 +3,6 @@
 
 #include "pid.h"
 #include "can.h"
-#include "gpio.h"
 
 struct CAN_Motor
 {
@@ -31,6 +30,10 @@ void MotorEncoderProcess(struct CAN_Motor *motor, uint8_t *RecvData);
 extern void MotorParamInit(struct CAN_Motor *motor, \
 				float speedP,float speedI,float speedD,float speedErrormax,float speedOutmax, \
 				float positionP,float positionI,float positionD,float positionErrormax,float positionOutmax);
+extern void MotorParamInitFW(struct CAN_Motor *motor, \
+				float speedPrough,float speedPfine, float speedI,float speedD,float speedRangeRough, float speedRangeFine, float speedCompensation, float speedErrormax,float speedOutmax, \
+				float positionPrough, float positionPFine, float positionI,float positionD,float positionRangeRough, float positionRangeFine, float positionCompensation, float positionErrormax,float positionOutmax);
+
 extern void CanTransmit_1234(CAN_HandleTypeDef *hcanx, int16_t cm1_iq, int16_t cm2_iq, int16_t cm3_iq, int16_t cm4_iq);
 extern void CanTransmit_5678(CAN_HandleTypeDef *hcanx, int16_t cm1_iq, int16_t cm2_iq, int16_t cm3_iq, int16_t cm4_iq);
 extern void CanTransmit_9_12(CAN_HandleTypeDef *hcanx, int16_t cm1_iq, int16_t cm2_iq, int16_t cm3_iq, int16_t cm4_iq);

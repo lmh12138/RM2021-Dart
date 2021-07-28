@@ -25,9 +25,9 @@
 
 /*-----自动发射时的一些预期参数-----*/
 #define REFSPEED 6000                       //摩擦轮预期转速
-#define LETDOWN_2006_SPEED 2800             //2006下降速度
+#define LETDOWN_2006_SPEED 1000             //2006下降速度
 #define LETDOWN_2006_TIME 192               //2006下降控制时间
-#define RAISE_2006_SPEED 3000               //2006上升速度
+#define RAISE_2006_SPEED 1000               //2006上升速度
 #define RAISE_2006_TIME 255               //2006上升控制时间
 #define CHANGE_DART_ERROR 1000              //电机模式下填充飞镖时的预期误差值
 #define RAISE_FRICTIONGEAR_SPEED_ERROR 50   //摩擦轮预期误差值
@@ -39,7 +39,7 @@
 #define DART_POSITION_1 2500 //580
 #define DART_POSITION_2 1850
 #define DART_POSITION_3 1215
-#define DART_POSITION_4 570
+#define DART_POSITION_4 590
 
 /*-----两种控制模式的增益-----*/
 #define DIRECT_CTRL_GAIN 22.0f

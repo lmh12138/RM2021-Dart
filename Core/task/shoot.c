@@ -115,7 +115,7 @@ int AutoShoot(void)
     if(!change_dart_flag)
     {
         change_dart_flag = ChangeDart();
-				change_dart_time = 157;
+				//change_dart_time = 157;
         return 0;
     }
 		if(change_dart_time != 0){
@@ -127,11 +127,6 @@ int AutoShoot(void)
         letdown_3510frictiongear_flag = Letdown3510Frictiongear();
         return 0;
     }
-		//stop_time = 30;
-		//if(stop_time != 0){
-		//		stop_time --;
-		//		return 0;
-		//}
     if(!raise_3510frictiongear_flag)
     {
         if(!raise_3510frictiongear_waiting_flag)
@@ -207,7 +202,7 @@ int RaiseFrictiongearSpeed(void)
     */
 int Letdown3510Frictiongear(void)
 {
-		//使用碰撞开关,SET和RESET待定
+		//使用碰撞开关,高电平触发
 		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) == GPIO_PIN_RESET){	//没到底
         POSITION_2006_MOTOR2.speed_pid.ref = -LETDOWN_2006_SPEED;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
@@ -220,11 +215,11 @@ int Letdown3510Frictiongear(void)
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-			if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到底了但电机还没停下来
-						return 0;
+				if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到底了但电机还没停下来
+							return 0;
 				}
 				else{
-						return 1;
+							return 1;
 				}
 		}
 //		//向下运行一段时间
@@ -259,7 +254,7 @@ int Letdown3510Frictiongear(void)
     */
 int Raise3510Frictiongear(void)
 {		
-		//使用碰撞开关,SET和RESET待定
+	//使用碰撞开关,高电平触发
 		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_10) == GPIO_PIN_RESET){	//没到顶
         POSITION_2006_MOTOR2.speed_pid.ref = RAISE_2006_SPEED;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
@@ -272,11 +267,11 @@ int Raise3510Frictiongear(void)
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);
         CanTransmit_1234(&hcan2, 0, POSITION_2006_MOTOR2.speed_pid.output, 0, 0);
-			if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到顶了但电机还没停下来
-						return 0;
+				if(POSITION_2006_MOTOR2.fdbSpeed != 0){	//到顶了但电机还没停下来
+							return 0;
 				}
 				else{
-						return 1;
+							return 1;
 				}
 		}
 //		//向上运行一段时间

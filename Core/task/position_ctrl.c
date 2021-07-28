@@ -10,7 +10,14 @@ double transform = 10000 / (1684 - 1024);
 void PositionCtrl_Remote(void)
 {
     #ifdef SERVO
-    dart.dart_roll.RollSpeed = 0.05f * (float)(Remote.rc.ch2 - CHx_BIAS);
+		static int tmp = 0;
+		if(Remote.rc.ch2 - CHx_BIAS > 0)tmp = 1;
+		else if(Remote.rc.ch2 - CHx_BIAS < 0)tmp = -1;
+		else{
+			dart.dart_count += tmp;
+			tmp = 0;
+		}
+    //dart.dart_roll.RollSpeed = 0.05f * (float)(Remote.rc.ch2 - CHx_BIAS);
     #endif
 
     #ifndef SERVO

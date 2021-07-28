@@ -64,6 +64,55 @@ void MotorParamInit(struct CAN_Motor *motor, \
 }
 
 /**
+  * @brief 电机PID参数初始化
+  * @param motor 电机数据结构体
+  * @param speedPrough 速度环P粗调，必须大于Fine
+  * @param speedPfine 速度环P细调
+  * @param speedI 速度环I
+  * @param speedD 速度环D
+  * @param speedRangeRough 速度环粗调范围
+  * @param speedRangeFine 速度环细调范围
+  * @param speedCompensation 速度环补偿
+  * @param speedErrormax 速度环积分上限
+  * @param speedOutmax 速度环输出上限
+  * @param positionPrough 位置环P粗调，必须大于Fine
+  * @param positionPfine 位置环P细调
+  * @param positionI 位置环I
+  * @param positionD 位置环D
+  * @param positionRangeRough 位置环粗调范围
+  * @param positionRangeFine 位置环细调范围
+  * @param positionCompensation 位置环补偿
+  * @param positionErrormax 位置环积分上限
+  * @param positionOutmax 位置环输出上限
+  * @retval None
+  */
+void MotorParamInitFW(struct CAN_Motor *motor, \
+				float speedPrough,float speedPfine, float speedI,float speedD,float speedRangeRough, float speedRangeFine, float speedCompensation, float speedErrormax,float speedOutmax, \
+				float positionPrough, float positionPFine, float positionI,float positionD,float positionRangeRough, float positionRangeFine, float positionCompensation, float positionErrormax,float positionOutmax)
+{
+    motor->speed_pid.KP = speedPrough;
+	motor->speed_pid.KI = speedI;
+	motor->speed_pid.KD = speedD;
+	motor->speed_pid.error_max = speedErrormax;
+	motor->speed_pid.outputMax = speedOutmax;
+    motor->speed_pid.KP_fine = speedPfine;
+    motor->speed_pid.range_rough = speedRangeRough;
+    motor->speed_pid.range_fine = speedRangeFine;
+    motor->speed_pid.compensation = speedCompensation;
+	motor->speed_pid.PID_Mode = PID_COMP_POSITION;
+	motor->position_pid.KP = positionPrough;
+	motor->position_pid.KI = positionI;
+	motor->position_pid.KD = positionD;
+	motor->position_pid.error_max = positionErrormax;
+	motor->position_pid.outputMax = positionOutmax;
+    motor->position_pid.KP_fine = positionPFine;
+    motor->position_pid.range_rough = positionRangeRough;
+    motor->position_pid.range_fine = positionRangeFine;
+    motor->position_pid.compensation = positionCompensation;
+	motor->position_pid.PID_Mode = PID_COMP_POSITION;
+}
+
+/**
 	* @brief CAN通信电机的反馈数据具体解析函数
 	* @param 电机数据结构体
 	* @retval None
@@ -71,21 +120,35 @@ void MotorParamInit(struct CAN_Motor *motor, \
 void MotorEncoderProcess(struct CAN_Motor *motor, uint8_t *RecvData)
 {
 	motor->last_fdbPosition = motor->fdbPosition;
-	motor->fdbPosition = (RecvData[0]<<8|RecvData[1]);
+	motor->fdbPosition = RecvData[0]<<8|RecvData[1];
 	motor->fdbSpeed = RecvData[2]<<8|RecvData[3];
 	motor->electric_current = RecvData[4]<<8|RecvData[5];
 	motor->temperature = RecvData[6];
 
 	/* 电机数据过零处理，避免出现位置突变的情况，算出电机已经转过的圈数 */
-	if(motor->fdbPosition - motor->last_fdbPosition > 4096)
-		motor->round --;
-	else if(motor -> fdbPosition - motor->last_fdbPosition < -4096)
-		motor->round ++;
-	motor->real_position = (motor->fdbPosition + motor->round * 8192);	//位置环需要真实角度数据 
-	if(motor -> round > 19 || motor -> round < -19)
-	{
-		motor -> round = 0;
-	}
+	/*为了避免安装电机后编码器范围在5k左右导致开机即“过零”*/
+		static uint8_t IsFirstCanData=1;
+		if(motor->fdbPosition - motor->last_fdbPosition > 4096)
+		{
+			if(IsFirstCanData==1&&motor==&can1_motor_9)
+			{
+				IsFirstCanData=0;
+			}
+			else
+			motor->round --;
+		}
+		else if(motor -> fdbPosition - motor->last_fdbPosition < -4096)
+		{
+			if(IsFirstCanData==1&&motor==&can1_motor_9)
+			{
+				IsFirstCanData=0;
+			}
+			else
+			motor->round ++;
+		}
+	motor->last_real_position = motor->real_position;
+	motor->real_position = motor->fdbPosition + motor->round * 8192;	//位置环需要真实角度数据 
+
 //	if(motor->place == CHASSIS_Can)
 //		motor->line_speed = motor->fdbSpeed*2*3.1415926f*motor_radio/60/19/1000;	//底盘电机线速度计算，得到战车的速度m/s	
 //	if(motor->place == GIMBAL_Can)                                     //云台需要编码器数据解算角速度
