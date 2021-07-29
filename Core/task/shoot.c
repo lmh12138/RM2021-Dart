@@ -203,7 +203,7 @@ int RaiseFrictiongearSpeed(void)
 int Letdown3510Frictiongear(void)
 {
 		//使用碰撞开关,高电平触发
-		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) == GPIO_PIN_RESET){	//没到底
+		if(HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11) != GPIO_PIN_SET){	//没到底
         POSITION_2006_MOTOR2.speed_pid.ref = -LETDOWN_2006_SPEED;
         POSITION_2006_MOTOR2.speed_pid.fdb = POSITION_2006_MOTOR2.fdbSpeed;
         PID_Calc(&POSITION_2006_MOTOR2.speed_pid);

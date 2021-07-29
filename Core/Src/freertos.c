@@ -66,21 +66,21 @@ osThreadId_t PositionTaskHandle;
 const osThreadAttr_t PositionTask_attributes = {
   .name = "PositionTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for UserCmdTask */
 osThreadId_t UserCmdTaskHandle;
 const osThreadAttr_t UserCmdTask_attributes = {
   .name = "UserCmdTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for RefereeTask */
 osThreadId_t RefereeTaskHandle;
 const osThreadAttr_t RefereeTask_attributes = {
   .name = "RefereeTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for Supervise_Timer */
 osTimerId_t Supervise_TimerHandle;
@@ -195,6 +195,7 @@ void StartPositionTask(void *argument)
 }
 
 /* USER CODE BEGIN Header_StartUserCmdTask */
+GPIO_PinState a = 0;
 /**
 * @brief Function implementing the UserCmdTask thread.
 * @param argument: Not used
@@ -208,6 +209,7 @@ void StartUserCmdTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+		//a = HAL_GPIO_ReadPin(GPIOH,GPIO_PIN_11);
     DartStateChange();
     osDelay(1);
   }
