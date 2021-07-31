@@ -11,12 +11,14 @@ void PositionCtrl_Remote(void)
 {
     #ifdef SERVO
 		static int tmp = 0;
-		if(Remote.rc.ch2 - CHx_BIAS > 0)tmp = 1;
-		else if(Remote.rc.ch2 - CHx_BIAS < 0)tmp = -1;
-		else{
-			dart.dart_count += tmp;
-			tmp = 0;
-		}
+    if(dart.strike_state == DEBUG){		
+        if(Remote.rc.ch2 - CHx_BIAS > 0)tmp = 1;
+        else if(Remote.rc.ch2 - CHx_BIAS < 0)tmp = -1;
+        else{
+          dart.dart_count += tmp;
+          tmp = 0;
+        }
+    }
     //dart.dart_roll.RollSpeed = 0.05f * (float)(Remote.rc.ch2 - CHx_BIAS);
     #endif
 

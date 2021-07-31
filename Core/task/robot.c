@@ -21,8 +21,11 @@ struct dart_t dart;
 extern struct DT7Remote_t Remote;
 extern ext_dart_client_cmd_t dart_client_cmd_t;
 extern uint16_t last_operate_launch_cmd_time;
+extern ext_game_state_t game_state;
+extern int shoot_twice;
 
 int auto_flag = 0;
+int auto_flag_mouse = 1;
 
 /**
     * @brief  : 飞镖架参数初始化
@@ -126,6 +129,7 @@ void DartStateChange(void)
 							dart.dart_count = 4;
 							dart.auto_strike = AUTO_STOP;
 							dart.auto_speed = AUTO_SPEED_OFF;
+							shoot_twice = 0;
 						}
         }
         else if(Remote.rc.s1 == 3) //左上角switch->中
@@ -160,12 +164,17 @@ void DartStateChange(void)
     }
     else if(dart.work_state == MouseKeyControl)
     {
-        if(dart_client_cmd_t.dart_launch_opening_status == 0 && dart_client_cmd_t.operate_launch_cmd_time != last_operate_launch_cmd_time){
+        if(game_state.game_progress == 4 && dart_client_cmd_t.dart_launch_opening_status == 0 && auto_flag_mouse == 1){
             dart.auto_strike = AUTO_READY;    //可以发射
             dart.auto_speed = AUTO_SPEED_ON;  //启动摩擦轮
+						auto_flag_mouse = 0;
         }
+//        if(dart_client_cmd_t.dart_launch_opening_status == 0 && dart_client_cmd_t.operate_launch_cmd_time <= last_operate_launch_cmd_time && auto_flag == 1){
+//            dart.auto_strike = AUTO_READY;    //可以发射
+//            dart.auto_speed = AUTO_SPEED_ON;  //启动摩擦轮
+//						auto_flag = 0;
+//        }
         ShootCtrl_MouseKey();
         PositionCtrl_MouseKey();
     }
 }
-

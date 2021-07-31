@@ -21,6 +21,7 @@
 
 extern struct dart_t dart;
 extern int auto_flag;
+extern int auto_flag_mouse;
 int dart_strike_flag = 0;
 int change_dart_flag = 0;
 int raise_frictiongear_speed_flag = 0;
@@ -30,6 +31,7 @@ int raise_3510frictiongear_flag = 0;
 int raise_3510frictiongear_count = 0;
 int raise_3510frictiongear_waiting_flag = 0;
 int speed_error;
+int shoot_twice = 0;
 
 /**
     * @brief  : 发射系统状态改变函数
@@ -39,7 +41,7 @@ int speed_error;
 void ShootParamChange(void)
 {
   if(dart.work_state == RemoteControl){    
-    if(dart.work_state == STOP)
+			if(dart.work_state == STOP)
       {
           CanTransmit_1234(&hcan1, 0, 0, 0, 0);
           CanTransmit_5678(&hcan1, 0, 0, 0, 0);
@@ -109,13 +111,13 @@ void ShootParamCalculate(void)
     * @return  {1：发射成功；0：发射失败}
     */
 int change_dart_time = 0;
-int stop_time = 0;
+
 int AutoShoot(void)
 {
     if(!change_dart_flag)
     {
         change_dart_flag = ChangeDart();
-				//change_dart_time = 157;
+				change_dart_time = 10;
         return 0;
     }
 		if(change_dart_time != 0){
@@ -131,7 +133,7 @@ int AutoShoot(void)
     {
         if(!raise_3510frictiongear_waiting_flag)
         {
-            osDelay(10);
+            osDelay(8);
             raise_3510frictiongear_waiting_flag = 1;
         }
         raise_3510frictiongear_flag = Raise3510Frictiongear();
@@ -140,12 +142,21 @@ int AutoShoot(void)
     else
     {
         dart.auto_strike = AUTO_STOP;
-        auto_flag = 1;
         dart.dart_count -= 1;
         change_dart_flag = 0;
         letdown_3510frictiongear_flag = 0;
         raise_3510frictiongear_flag = 0;
         raise_3510frictiongear_waiting_flag = 0;
+        if(dart.dart_count == 2 && shoot_twice == 0){
+            auto_flag = 0;
+						auto_flag_mouse = 0;
+            shoot_twice = 1;
+						dart.auto_speed = AUTO_SPEED_OFF;
+        }
+        else{
+            auto_flag = 1;
+						auto_flag_mouse = 1;
+        }
         return 1;
     }
 }
